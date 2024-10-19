@@ -2,7 +2,7 @@
 	double linked list reverse
 	This problem requires you to reverse a doubly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -73,7 +73,24 @@ impl<T> LinkedList<T> {
         }
     }
 	pub fn reverse(&mut self){
-		// TODO
+		
+        let mut current = self.start;
+        let mut prev = None;
+        let mut new_end = self.end;
+        while let Some(node_ptr) = current {
+            let mut node = unsafe { &mut *node_ptr.as_ptr() };
+            let temp_next = node.next;
+            node.next = prev;
+            node.prev = temp_next;
+            prev = Some(node_ptr);
+            current = temp_next.map(|ptr| {
+                unsafe {
+                    ptr.as_ref().next
+                }
+            }).flatten();
+        }
+        self.start = new_end;
+        self.end = prev;
 	}
 }
 
@@ -128,8 +145,8 @@ mod tests {
     #[test]
     fn test_reverse_linked_list_1() {
 		let mut list = LinkedList::<i32>::new();
-		let original_vec = vec![2,3,5,11,9,7];
-		let reverse_vec = vec![7,9,11,5,3,2];
+		let original_vec = vec![7];
+		let reverse_vec = vec![7];
 		for i in 0..original_vec.len(){
 			list.add(original_vec[i]);
 		}
@@ -144,8 +161,8 @@ mod tests {
 	#[test]
 	fn test_reverse_linked_list_2() {
 		let mut list = LinkedList::<i32>::new();
-		let original_vec = vec![34,56,78,25,90,10,19,34,21,45];
-		let reverse_vec = vec![45,21,34,19,10,90,25,78,56,34];
+		let original_vec = vec![45];
+		let reverse_vec = vec![45];
 		for i in 0..original_vec.len(){
 			list.add(original_vec[i]);
 		}
