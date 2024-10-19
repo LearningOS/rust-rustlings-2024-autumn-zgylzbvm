@@ -6,6 +6,7 @@
 
 
 
+
 fn sort<T: PartialOrd + Copy>(array: &mut [T]) {
     let n = array.len();
     for i in 0..n {
