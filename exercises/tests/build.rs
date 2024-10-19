@@ -10,11 +10,8 @@ fn main() {
        .duration_since(std::time::UNIX_EPOCH)
        .unwrap()
        .as_secs();
-    let your_command = format!(
-        "rerun-if-env-changed=TEST_FOO cargo test -- --ignored --exact tests7 && export TEST_FOO={}",
-        timestamp
-    );
-    println!("cargo:{}", your_command);
+    println!("cargo:rerun-if-env-changed=TEST_FOO cargo test -- --ignored --exact tests7 && export TEST_FOO={timestamp}");
+
 
     // In tests8, we should enable "pass" feature to make the
     // testcase return early. Fill in the command to tell
