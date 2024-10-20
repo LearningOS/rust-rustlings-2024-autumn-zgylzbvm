@@ -52,12 +52,36 @@ where
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
         //TODO
+        if self.root.is_none() {
+            self.root = Some(Box::new(TreeNode::new(value)));
+            return;
+        }
+        let mut current = &mut self.root.as_mut().unwrap();
+        while let Some(node) = current {
+            match value.cmp(&node.value) {
+                Ordering::Less => {
+                    current = &mut node.left;
+                }
+                Ordering::Greater => {
+                    current = &mut node.right;
+                }
+                Ordering::Equal => {
+                    return;
+                }
+            }
+        }
+        *current = Some(Box::new(TreeNode::new(value)));
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
         //TODO
-        true
+        //true
+        match self.root {
+            Some(ref node) => node.search(value),
+            None => false,
+        }
+
     }
 }
 
