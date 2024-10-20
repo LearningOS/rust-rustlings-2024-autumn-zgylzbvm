@@ -153,5 +153,5 @@ mod tests {
             None => panic!("Root should not be None after insertion"),
         }
     }
-}   
+}    
 
