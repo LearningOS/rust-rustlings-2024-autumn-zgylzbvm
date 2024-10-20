@@ -40,42 +40,29 @@ where
     }
 }
 
-
 impl<T> BinarySearchTree<T>
 where
     T: Ord,
 {
+
     fn new() -> Self {
         BinarySearchTree { root: None }
     }
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        if self.root.is_none() {
-            self.root = Some(Box::new(TreeNode::new(value)));
-            return;
+        //TODO
+        match self.root {
+            Some(ref mut node) => node.insert(value),
+            None => self.root = Some(Box::new(TreeNode::new(value))),
         }
-        let mut current = &mut self.root.as_mut().unwrap();
-        while let Some(node) = current {
-            match value.cmp(&node.value) {
-                Ordering::Less => {
-                    current = &mut node.left;
-                }
-                Ordering::Greater => {
-                    current = &mut node.right;
-                }
-                Ordering::Equal => {
-                    return;
-                }
-            }
-        }
-        *current = Some(Box::new(TreeNode::new(value)));
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        match self.root {
-            Some(ref node) => node.search(value),
+        //TODO
+        match &self.root {
+            Some(node) => node.search(&value),
             None => false,
         }
     }
@@ -87,37 +74,31 @@ where
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
+        //TODO
         match value.cmp(&self.value) {
             Ordering::Less => {
-                if let Some(ref mut left_node) = self.left {
-                    left_node.insert(value);
+                if let Some(ref mut left) = self.left {
+                    left.insert(value);
                 } else {
                     self.left = Some(Box::new(TreeNode::new(value)));
                 }
-            }
+            },
             Ordering::Greater => {
-                if let Some(ref mut right_node) = self.right {
-                    right_node.insert(value);
+                if let Some(ref mut right) = self.right {
+                    right.insert(value);
                 } else {
                     self.right = Some(Box::new(TreeNode::new(value)));
                 }
-            }
-            Ordering::Equal => {}
+            },
+            Ordering::Equal => {} // 如果值相等，我们不做任何操作，也可以在这里处理重复值
         }
     }
-
-    // Search for a value in the subtree rooted at this node
-    fn search(&self, value: T) -> bool {
-        if self.value == value {
-            return true;
+    fn search(&self, value: &T) -> bool {
+        match value.cmp(&self.value) {
+            Ordering::Equal => true,
+            Ordering::Less => self.left.as_ref().map_or(false, |node| node.search(value)),
+            Ordering::Greater => self.right.as_ref().map_or(false, |node| node.search(value)),
         }
-        if value < self.value && self.left.is_some() {
-            return self.left.as_ref().unwrap().search(value);
-        }
-        if value > self.value && self.right.is_some() {
-            return self.right.as_ref().unwrap().search(value);
-        }
-        false
     }
 }
 
@@ -172,6 +153,5 @@ mod tests {
             None => panic!("Root should not be None after insertion"),
         }
     }
-}    
-
+}   
 
