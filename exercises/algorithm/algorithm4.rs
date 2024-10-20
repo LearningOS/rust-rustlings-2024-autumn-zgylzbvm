@@ -40,18 +40,17 @@ where
     }
 }
 
+
 impl<T> BinarySearchTree<T>
 where
     T: Ord,
 {
-
     fn new() -> Self {
         BinarySearchTree { root: None }
     }
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        //TODO
         if self.root.is_none() {
             self.root = Some(Box::new(TreeNode::new(value)));
             return;
@@ -75,13 +74,10 @@ where
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
-        //TODO
-        //true
         match self.root {
             Some(ref node) => node.search(value),
             None => false,
         }
-
     }
 }
 
@@ -91,7 +87,6 @@ where
 {
     // Insert a node into the tree
     fn insert(&mut self, value: T) {
-        //TODO
         match value.cmp(&self.value) {
             Ordering::Less => {
                 if let Some(ref mut left_node) = self.left {
@@ -109,6 +104,20 @@ where
             }
             Ordering::Equal => {}
         }
+    }
+
+    // Search for a value in the subtree rooted at this node
+    fn search(&self, value: T) -> bool {
+        if self.value == value {
+            return true;
+        }
+        if value < self.value && self.left.is_some() {
+            return self.left.as_ref().unwrap().search(value);
+        }
+        if value > self.value && self.right.is_some() {
+            return self.right.as_ref().unwrap().search(value);
+        }
+        false
     }
 }
 
