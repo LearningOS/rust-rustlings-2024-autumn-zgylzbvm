@@ -7,15 +7,18 @@ fn main() {
     // called `TEST_FOO`. Print in the standard output to let
     // Cargo do it.
     let timestamp = std::time::SystemTime::now()
-       .duration_since(std::time::UNIX_EPOCH)
-       .unwrap()
-       .as_secs();
-    println!("cargo:rerun-if-env-changed=TEST_FOO cargo test -- --ignored --exact tests7 && export TEST_FOO={timestamp}");
-
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_secs(); // What's the use of this timestamp here?
+    let your_command = format!(
+        "Your command here with {}, please checkout exercises/tests/build.rs",
+        timestamp
+    );
+    println!("cargo:{}", your_command);
 
     // In tests8, we should enable "pass" feature to make the
     // testcase return early. Fill in the command to tell
     // Cargo about that.
-    println!("cargo:cargo test -- --ignored --exact tests8 --features pass");
+    let your_command = "pass";
+    println!("cargo:{}", your_command);
 }
-
